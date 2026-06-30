@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Camera, Music2 } from "lucide-react";
+import { ArrowLeft, Camera, Music2, ExternalLink } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { VerifiedBadge } from "@/components/ui/VerifiedBadge";
 import { ShortlistToggleButton } from "@/components/ui/ShortlistButton";
 import { ProfileStats } from "@/components/profile/ProfileStats";
-import type { FullUserProfile, Platform, ProfileDetailResponse } from "@/types";
+import type { FullUserProfile, Platform, ProfileDetailResponse, UserProfileSummary } from "@/types";
 import { loadProfileByUsername } from "@/utils/profileLoader";
-import { getPlatformLabel } from "@/utils/dataHelpers";
+import { getPlatformLabel, extractProfiles } from "@/utils/dataHelpers";
 
 // Inline YouTube icon (not in lucide-react v1)
 const YoutubeIcon = ({ className }: { className?: string }) => (
@@ -23,20 +23,46 @@ function getPlatformIcon(platform: string) {
   return <Camera className="w-3.5 h-3.5" />;
 }
 
+function getFallbackAvatar(name: string): string {
+  const initials = encodeURIComponent(name.slice(0, 2).toUpperCase());
+  return `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=256&bold=true&font-size=0.4`;
+}
+
+/**
+ * Looks up the summary profile from the search JSON as a fallback
+ * when a full profile JSON doesn't exist in /profiles/.
+ */
+function findSummaryProfile(username: string, platform: string): UserProfileSummary | null {
+  const platformKey = (["instagram", "youtube", "tiktok"].includes(platform)
+    ? platform
+    : "instagram") as Platform;
+  const profiles = extractProfiles(platformKey);
+  return profiles.find((p) => p.username === username) ?? null;
+}
+
 export function ProfileDetailPage() {
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
   const platform = searchParams.get("platform") || "instagram";
-  const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(null);
-  const [loaded, setLoaded] = useState(false);
+
+  // undefined = not yet loaded, null = loaded but not found, value = loaded
+  const [profileData, setProfileData] = useState<ProfileDetailResponse | null | undefined>(undefined);
+  const [summaryProfile, setSummaryProfile] = useState<UserProfileSummary | null>(null);
 
   useEffect(() => {
     if (!username) return;
-    loadProfileByUsername(username).then((data) => {
-      setProfileData(data);
-      setLoaded(true);
-    });
-  }, [username]);
+    let cancelled = false;
+    const load = async () => {
+      const data = await loadProfileByUsername(username);
+      if (cancelled) return;
+      setProfileData(data ?? null);
+      setSummaryProfile(!data ? findSummaryProfile(username, platform) : null);
+    };
+    load();
+    return () => { cancelled = true; };
+  }, [username, platform]);
+
+  const loaded = profileData !== undefined;
 
   if (!username) {
     return (
@@ -61,7 +87,8 @@ export function ProfileDetailPage() {
     );
   }
 
-  if (!profileData) {
+  // ── No detail JSON AND no search-list data → true 404 ──
+  if (!profileData && !summaryProfile) {
     return (
       <Layout>
         <div className="flex flex-col items-center py-20 text-center">
@@ -80,7 +107,12 @@ export function ProfileDetailPage() {
     );
   }
 
-  const user: FullUserProfile = profileData.data.user_profile;
+  // ── Resolve user: full detail JSON takes priority, summary is fallback ──
+  const user: FullUserProfile = profileData
+    ? profileData.data.user_profile
+    : (summaryProfile as FullUserProfile);
+
+  const isPartialData = !profileData && !!summaryProfile;
 
   return (
     <Layout>
@@ -94,17 +126,26 @@ export function ProfileDetailPage() {
           Back to search
         </Link>
 
+        {/* Partial-data notice */}
+        {isPartialData && (
+          <div className="mb-4 px-4 py-2.5 bg-[#f7f5f3] border border-[#e0dedb] rounded-lg flex items-center gap-2">
+            <span className="text-xs text-[#605a57]">
+              Showing summary data only — full profile details aren't available for this creator.
+            </span>
+          </div>
+        )}
+
         {/* Profile header card */}
         <div className="bg-white border border-[#e0dedb] rounded-lg p-6 flex gap-5 items-start mb-4">
           <img
             src={user.picture}
-            alt={user.username}
+            alt={`${user.fullname} avatar`}
             referrerPolicy="no-referrer"
+            loading="lazy"
             onError={(e) => {
               const t = e.currentTarget;
               t.onerror = null;
-              const initials = encodeURIComponent((user.fullname || user.username).slice(0, 2).toUpperCase());
-              t.src = `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=256&bold=true&font-size=0.4`;
+              t.src = getFallbackAvatar(user.fullname || user.username);
             }}
             className="w-20 h-20 rounded-full object-cover ring-2 ring-[#e0dedb] shrink-0"
           />
@@ -132,9 +173,10 @@ export function ProfileDetailPage() {
                     href={user.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm text-[#aa3bff] hover:underline"
+                    className="inline-flex items-center gap-1 text-sm text-[#aa3bff] hover:underline"
                   >
-                    View on platform →
+                    View on platform
+                    <ExternalLink className="w-3 h-3" />
                   </a>
                 )}
               </div>
