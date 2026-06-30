@@ -73,7 +73,7 @@ export function ProfileDetailPage() {
       <Layout>
         <div className="flex flex-col items-center py-20 text-center">
           <p className="text-lg font-semibold text-[#37322f]">Invalid URL</p>
-          <Link to="/" className="mt-4 px-4 py-2 bg-[#37322f] text-white text-sm rounded-full hover:bg-[#37322f]/90 transition-colors">
+          <Link to={`/?platform=${platform}`} className="mt-4 px-4 py-2 bg-[#37322f] text-white text-sm rounded-full hover:bg-[#37322f]/90 transition-colors">
             Back to search
           </Link>
         </div>
@@ -101,7 +101,7 @@ export function ProfileDetailPage() {
             We couldn't find data for @{username}
           </p>
           <Link
-            to="/"
+            to={`/?platform=${platform}`}
             className="mt-6 px-4 py-2 bg-[#37322f] text-white text-sm rounded-full hover:bg-[#37322f]/90 transition-colors"
           >
             Back to search
@@ -126,7 +126,7 @@ export function ProfileDetailPage() {
       <div className="max-w-3xl">
         {/* Back */}
         <Link
-          to="/"
+          to={`/?platform=${platform}`}
           className="inline-flex items-center gap-1.5 text-sm text-[#605a57] hover:text-[#37322f] mb-6 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
