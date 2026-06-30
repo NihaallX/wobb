@@ -9,8 +9,12 @@ export const Header: React.FC = () => {
   return (
     <header className="bg-[#f7f5f3] border-b border-[#e0dedb] sticky top-0 z-50">
       <div className="max-w-[1160px] mx-auto px-6 py-3.5 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-1.5">
-          <span className="font-semibold text-[#37322f] text-base tracking-tight">Wobb</span>
+        <Link to="/" className="flex items-center gap-2">
+          <img
+            src="/logo.png"
+            alt="Wobb"
+            className="h-7 w-auto object-contain"
+          />
           <span className="text-[#605a57] text-sm hidden sm:inline">Influencer Discovery</span>
         </Link>
 
