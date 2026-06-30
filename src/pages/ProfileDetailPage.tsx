@@ -96,7 +96,7 @@ export function ProfileDetailPage() {
               <div className="text-gray-500">Engagement Rate</div>
               <div className="font-semibold">
                 {user.engagement_rate !== undefined
-                  ? (user.engagement_rate * 10000).toFixed(2) + "%"
+                  ? (user.engagement_rate * 100).toFixed(2) + "%"
                   : "N/A"}
               </div>
             </div>
@@ -132,7 +132,7 @@ export function ProfileDetailPage() {
               <div className="border p-2 rounded">
                 <div className="text-gray-500">Engagements</div>
                 <div className="font-semibold">
-                  {formatEngagementRate(user.engagement_rate)}
+                  {formatFollowersDetail(user.engagements)}
                 </div>
               </div>
             )}
@@ -148,8 +148,7 @@ export function ProfileDetailPage() {
             </a>
           )}
 
-          {/* TODO: candidates must implement Add to List feature */}
-          {/* TODO: candidates must implement Add to List feature */}
+
           <button
             disabled
             className="block mt-4 px-4 py-2 bg-gray-300 text-gray-500 rounded cursor-not-allowed"
