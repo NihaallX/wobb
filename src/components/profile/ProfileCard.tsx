@@ -1,18 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import type { Platform, UserProfileSummary } from "@/types";
-import { VerifiedBadge } from "./VerifiedBadge";
+import { VerifiedBadge } from "../ui/VerifiedBadge";
+import { formatFollowers } from "@/utils/formatters";
 
-interface ProfileCardProps {
+export interface ProfileCardProps {
   profile: UserProfileSummary;
   platform: Platform;
-  searchQuery: string;
+  searchQuery?: string;
   onProfileClick?: (username: string) => void;
-}
-
-function formatFollowersLocal(count: number) {
-  if (count >= 1000000) return (count / 1000000).toFixed(1) + "M followers";
-  if (count >= 1000) return (count / 1000).toFixed(0) + "K followers";
-  return count + " followers";
 }
 
 export function ProfileCard({
@@ -40,7 +35,7 @@ export function ProfileCard({
           <VerifiedBadge verified={profile.is_verified} />
         </div>
         <div className="text-sm text-gray-600">{profile.fullname}</div>
-        <div className="text-sm">{formatFollowersLocal(profile.followers)}</div>
+        <div className="text-sm">{formatFollowers(profile.followers)} followers</div>
       </div>
 
       <button

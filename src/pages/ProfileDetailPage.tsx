@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { Layout } from "@/components/Layout";
-import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { Layout } from "@/components/layout/Layout";
+import { VerifiedBadge } from "@/components/ui/VerifiedBadge";
 import type { FullUserProfile, ProfileDetailResponse } from "@/types";
-import { formatEngagementRate } from "@/utils/formatters";
+import { formatEngagementRate, formatFollowers } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
-
-function formatFollowersDetail(count: number) {
-  if (count >= 1000000) return (count / 1000000).toFixed(2) + "M";
-  if (count >= 1000) return (count / 1000).toFixed(1) + "K";
-  return String(count);
-}
 
 export function ProfileDetailPage() {
   const { username } = useParams<{ username: string }>();
@@ -89,7 +83,7 @@ export function ProfileDetailPage() {
             <div className="border p-2 rounded">
               <div className="text-gray-500">Followers</div>
               <div className="font-semibold">
-                {formatFollowersDetail(user.followers)}
+                {formatFollowers(user.followers)}
               </div>
             </div>
             <div className="border p-2 rounded">
@@ -110,7 +104,7 @@ export function ProfileDetailPage() {
               <div className="border p-2 rounded">
                 <div className="text-gray-500">Avg Likes</div>
                 <div className="font-semibold">
-                  {formatFollowersDetail(user.avg_likes)}
+                  {formatFollowers(user.avg_likes)}
                 </div>
               </div>
             )}
@@ -124,7 +118,7 @@ export function ProfileDetailPage() {
               <div className="border p-2 rounded">
                 <div className="text-gray-500">Avg Views</div>
                 <div className="font-semibold">
-                  {formatFollowersDetail(user.avg_views)}
+                  {formatFollowers(user.avg_views)}
                 </div>
               </div>
             )}
@@ -132,7 +126,7 @@ export function ProfileDetailPage() {
               <div className="border p-2 rounded">
                 <div className="text-gray-500">Engagements</div>
                 <div className="font-semibold">
-                  {formatFollowersDetail(user.engagements)}
+                  {formatFollowers(user.engagements)}
                 </div>
               </div>
             )}

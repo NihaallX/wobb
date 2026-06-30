@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { Platform } from "@/types";
-import { Layout } from "@/components/Layout";
-import { PlatformFilter } from "@/components/PlatformFilter";
-import { ProfileList } from "@/components/ProfileList";
+import { Layout } from "@/components/layout/Layout";
+import { PlatformFilter } from "@/components/ui/PlatformFilter";
+import { ProfileList } from "@/components/profile/ProfileList";
 import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 
 export function SearchPage() {

@@ -1,10 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { UserProfileSummary } from '@/types'
-
-export interface ShortlistEntry extends UserProfileSummary {
-  addedAt: number;
-}
+import type { UserProfileSummary, ShortlistEntry } from '@/types'
 
 interface ShortlistStore {
   shortlist: ShortlistEntry[]
