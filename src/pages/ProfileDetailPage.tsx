@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { VerifiedBadge } from "@/components/ui/VerifiedBadge";
+import { ShortlistButton } from "@/components/ui/ShortlistButton";
 import type { FullUserProfile, ProfileDetailResponse } from "@/types";
 import { formatEngagementRate, formatFollowers } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
@@ -143,12 +144,7 @@ export function ProfileDetailPage() {
           )}
 
 
-          <button
-            disabled
-            className="block mt-4 px-4 py-2 bg-gray-300 text-gray-500 rounded cursor-not-allowed"
-          >
-            Add to List
-          </button>
+          <ShortlistButton profile={user} className="mt-4 w-40 justify-center" />
         </div>
       </div>
     </Layout>

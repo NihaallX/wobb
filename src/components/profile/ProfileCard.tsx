@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "../ui/VerifiedBadge";
 import { formatFollowers } from "@/utils/formatters";
+import { ShortlistButton } from "../ui/ShortlistButton";
 
 export interface ProfileCardProps {
   profile: UserProfileSummary;
@@ -38,13 +39,7 @@ export function ProfileCard({
         <div className="text-sm">{formatFollowers(profile.followers)} followers</div>
       </div>
 
-      <button
-        disabled
-        className="px-3 py-1 bg-gray-300 text-gray-500 text-sm rounded cursor-not-allowed"
-        onClick={(e) => e.stopPropagation()}
-      >
-        Add to List
-      </button>
+      <ShortlistButton profile={profile} />
     </div>
   );
 }
