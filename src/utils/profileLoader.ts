@@ -19,7 +19,7 @@ export async function loadProfileByUsername(
     const data =
       (result as { default?: ProfileDetailResponse }).default ?? result;
     return data as ProfileDetailResponse;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
