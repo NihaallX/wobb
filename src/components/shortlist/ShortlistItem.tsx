@@ -18,8 +18,9 @@ export const ShortlistItem: React.FC<ShortlistItemProps> = ({ profile }) => {
     <div className="flex items-center gap-3 px-3 py-2 bg-white rounded-lg border border-[#e0dedb]">
       <img
         src={profile.picture}
-        alt={profile.username}
+        alt={`${profile.fullname} avatar`}
         referrerPolicy="no-referrer"
+        loading="lazy"
         onError={(e) => {
           const t = e.currentTarget;
           t.onerror = null;
@@ -40,8 +41,8 @@ export const ShortlistItem: React.FC<ShortlistItemProps> = ({ profile }) => {
       </div>
       <button
         onClick={() => removeFromShortlist(profile.user_id)}
+        aria-label={`Remove ${profile.fullname} from shortlist`}
         className="shrink-0 text-[#605a57] hover:text-red-500 transition-colors"
-        title="Remove"
       >
         <X className="w-4 h-4" />
       </button>

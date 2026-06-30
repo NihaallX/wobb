@@ -4,9 +4,9 @@ import { ArrowLeft, Camera, Music2 } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { VerifiedBadge } from "@/components/ui/VerifiedBadge";
 import { ShortlistToggleButton } from "@/components/ui/ShortlistButton";
+import { ProfileStats } from "@/components/profile/ProfileStats";
 import type { FullUserProfile, Platform, ProfileDetailResponse } from "@/types";
-import { formatFollowers, formatEngagementRate } from "@/utils/formatters";
-import { loadProfileByUsername, } from "@/utils/profileLoader";
+import { loadProfileByUsername } from "@/utils/profileLoader";
 import { getPlatformLabel } from "@/utils/dataHelpers";
 
 // Inline YouTube icon (not in lucide-react v1)
@@ -149,68 +149,7 @@ export function ProfileDetailPage() {
         </div>
 
         {/* Stats grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="bg-[#fbfaf9] border border-[#e0dedb] rounded-lg p-4">
-            <div className="text-xs text-[#605a57] mb-1">Followers</div>
-            <div className="text-base font-semibold text-[#37322f]">
-              {formatFollowers(user.followers)}
-            </div>
-          </div>
-
-          <div className="bg-[#fbfaf9] border border-[#e0dedb] rounded-lg p-4">
-            <div className="text-xs text-[#605a57] mb-1">Engagement Rate</div>
-            <div className="text-base font-semibold text-[#37322f]">
-              {user.engagement_rate !== undefined
-                ? formatEngagementRate(user.engagement_rate)
-                : "N/A"}
-            </div>
-          </div>
-
-          {user.engagements !== undefined && (
-            <div className="bg-[#fbfaf9] border border-[#e0dedb] rounded-lg p-4">
-              <div className="text-xs text-[#605a57] mb-1">Engagements</div>
-              <div className="text-base font-semibold text-[#37322f]">
-                {formatFollowers(user.engagements)}
-              </div>
-            </div>
-          )}
-
-          {user.posts_count !== undefined && (
-            <div className="bg-[#fbfaf9] border border-[#e0dedb] rounded-lg p-4">
-              <div className="text-xs text-[#605a57] mb-1">Posts</div>
-              <div className="text-base font-semibold text-[#37322f]">
-                {user.posts_count.toLocaleString()}
-              </div>
-            </div>
-          )}
-
-          {user.avg_likes !== undefined && (
-            <div className="bg-[#fbfaf9] border border-[#e0dedb] rounded-lg p-4">
-              <div className="text-xs text-[#605a57] mb-1">Avg. Likes</div>
-              <div className="text-base font-semibold text-[#37322f]">
-                {formatFollowers(user.avg_likes)}
-              </div>
-            </div>
-          )}
-
-          {user.avg_comments !== undefined && (
-            <div className="bg-[#fbfaf9] border border-[#e0dedb] rounded-lg p-4">
-              <div className="text-xs text-[#605a57] mb-1">Avg. Comments</div>
-              <div className="text-base font-semibold text-[#37322f]">
-                {user.avg_comments.toLocaleString()}
-              </div>
-            </div>
-          )}
-
-          {user.avg_views !== undefined && user.avg_views > 0 && (
-            <div className="bg-[#fbfaf9] border border-[#e0dedb] rounded-lg p-4">
-              <div className="text-xs text-[#605a57] mb-1">Avg. Views</div>
-              <div className="text-base font-semibold text-[#37322f]">
-                {formatFollowers(user.avg_views)}
-              </div>
-            </div>
-          )}
-        </div>
+        <ProfileStats user={user} />
       </div>
     </Layout>
   );

@@ -42,11 +42,12 @@ export const ProfileCard = React.memo(function ProfileCard({
       {/* Avatar */}
       <img
         src={profile.picture}
-        alt={profile.username}
+        alt={`${profile.fullname} avatar`}
         referrerPolicy="no-referrer"
+        loading="lazy"
         onError={(e) => {
           const target = e.currentTarget;
-          target.onerror = null; // prevent infinite loop
+          target.onerror = null;
           target.src = getFallbackAvatar(profile.fullname || profile.username);
         }}
         className={`w-11 h-11 rounded-full object-cover ring-2 shrink-0 transition-all ${

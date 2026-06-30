@@ -34,6 +34,8 @@ export const ShortlistToggleButton = React.memo(
       return (
         <button
           onClick={handleClick}
+          aria-label={`Remove ${profile.fullname} from shortlist`}
+          aria-pressed={true}
           className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-full bg-[#aa3bff] text-white border border-transparent transition-colors hover:bg-[#9228e3]"
         >
           <Check className="w-3 h-3" />
@@ -45,6 +47,8 @@ export const ShortlistToggleButton = React.memo(
     return (
       <button
         onClick={handleClick}
+        aria-label={`Add ${profile.fullname} to shortlist`}
+        aria-pressed={false}
         className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-full border border-[#e0dedb] bg-white text-[#37322f] hover:border-[#37322f] transition-colors"
       >
         <Plus className="w-3 h-3" />
