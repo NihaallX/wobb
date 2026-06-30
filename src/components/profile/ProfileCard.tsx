@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "../ui/VerifiedBadge";
+import { ShortlistToggleButton } from "../ui/ShortlistButton";
 import { formatFollowers, formatEngagementRate } from "@/utils/formatters";
-import { ShortlistButton } from "../ui/ShortlistButton";
 import useShortlistStore from "@/store/useShortlistStore";
 
 export interface ProfileCardProps {
@@ -19,7 +19,9 @@ export const ProfileCard = React.memo(function ProfileCard({
   onProfileClick,
 }: ProfileCardProps) {
   const navigate = useNavigate();
-  const isShortlisted = useShortlistStore((state) => state.isShortlisted(profile.user_id));
+  const isShortlisted = useShortlistStore((state) =>
+    state.isShortlisted(profile.user_id)
+  );
 
   const handleClick = () => {
     if (onProfileClick) onProfileClick(profile.username);
@@ -29,32 +31,39 @@ export const ProfileCard = React.memo(function ProfileCard({
   return (
     <div
       onClick={handleClick}
-      className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:shadow-md hover:border-gray-300 transition-all w-full group"
+      className="w-full flex items-center gap-4 px-4 py-3 bg-white border border-[#e0dedb] rounded-lg hover:shadow-sm hover:border-[#605a57]/30 transition-all cursor-pointer"
     >
-      <img 
-        src={profile.picture} 
-        className={`w-14 h-14 rounded-full object-cover transition-all ${isShortlisted ? 'ring-2 ring-[#aa3bff] ring-offset-2' : 'ring-1 ring-gray-100'}`} 
+      {/* Avatar */}
+      <img
+        src={profile.picture}
+        alt={profile.username}
+        className={`w-11 h-11 rounded-full object-cover ring-2 shrink-0 transition-all ${
+          isShortlisted ? "ring-[#aa3bff]" : "ring-transparent"
+        }`}
       />
-      <div className="text-left flex-1 min-w-0">
-        <div className="font-bold text-gray-900 text-base truncate flex items-center gap-1">
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1 text-sm font-semibold text-[#37322f] truncate">
           <span className="truncate">@{profile.username}</span>
           <VerifiedBadge verified={profile.is_verified} />
         </div>
-        <div className="text-sm text-gray-500 truncate mb-1">{profile.fullname}</div>
-        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+        <div className="text-xs text-[#605a57] truncate">{profile.fullname}</div>
+        <div className="flex gap-2 mt-1.5 flex-wrap">
+          <span className="bg-[#f7f5f3] text-[#37322f] text-xs px-2 py-0.5 rounded border border-[#e0dedb]">
             {formatFollowers(profile.followers)} followers
           </span>
           {profile.engagement_rate !== undefined && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#aa3bff]/10 text-[#aa3bff]">
-              {formatEngagementRate(profile.engagement_rate)} engagement
+            <span className="bg-[#f7f5f3] text-[#37322f] text-xs px-2 py-0.5 rounded border border-[#e0dedb]">
+              {formatEngagementRate(profile.engagement_rate)} eng.
             </span>
           )}
         </div>
       </div>
 
+      {/* Action */}
       <div className="shrink-0">
-        <ShortlistButton profile={profile} />
+        <ShortlistToggleButton profile={profile} />
       </div>
     </div>
   );

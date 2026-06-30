@@ -4,19 +4,20 @@ import { ShortlistPanel } from "../shortlist/ShortlistPanel";
 
 interface LayoutProps {
   children: ReactNode;
-  title?: string;
 }
 
-export function Layout({ children, title }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-[#fcfcfc] flex flex-col font-sans text-gray-900">
+    <div className="min-h-screen bg-[#f7f5f3] flex flex-col">
       <Header />
-      <div className="flex-1 flex flex-col lg:flex-row max-w-[1400px] mx-auto w-full">
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
-          {title && <h1 className="text-3xl font-bold text-gray-900 mb-6">{title}</h1>}
+      <div className="flex-1 flex flex-row">
+        <main className="flex-1 min-w-0 px-6 py-8 lg:px-10">
           {children}
         </main>
-        <ShortlistPanel />
+        {/* Sidebar — hidden on mobile */}
+        <div className="hidden md:block">
+          <ShortlistPanel />
+        </div>
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { UserProfileSummary, ShortlistEntry } from '@/types'
+import type { UserProfileSummary } from '@/types'
 
 interface ShortlistStore {
-  shortlist: ShortlistEntry[]
+  shortlist: UserProfileSummary[]
   addToShortlist: (profile: UserProfileSummary) => void
   removeFromShortlist: (userId: string) => void
   isShortlisted: (userId: string) => boolean
@@ -16,15 +16,11 @@ const useShortlistStore = create<ShortlistStore>()(
       shortlist: [],
       addToShortlist: (profile) => {
         if (!get().isShortlisted(profile.user_id)) {
-          set(state => ({
-            shortlist: [...state.shortlist, { ...profile, addedAt: Date.now() }]
-          }))
+          set(state => ({ shortlist: [...state.shortlist, profile] }))
         }
       },
       removeFromShortlist: (userId) =>
-        set(state => ({
-          shortlist: state.shortlist.filter(p => p.user_id !== userId)
-        })),
+        set(state => ({ shortlist: state.shortlist.filter(p => p.user_id !== userId) })),
       isShortlisted: (userId) => get().shortlist.some(p => p.user_id === userId),
       clearShortlist: () => set({ shortlist: [] }),
     }),

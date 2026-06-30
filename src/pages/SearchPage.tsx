@@ -11,33 +11,44 @@ export function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const allProfiles = useMemo(() => extractProfiles(platform), [platform]);
-  const filtered = useMemo(() => filterProfiles(allProfiles, searchQuery), [allProfiles, searchQuery]);
+  const filtered = useMemo(
+    () => filterProfiles(allProfiles, searchQuery),
+    [allProfiles, searchQuery]
+  );
 
   const handleProfileClick = useCallback((username: string) => {
-    console.log("Clicked profile:", username);
+    console.log("Navigating to:", username);
+  }, []);
+
+  const handlePlatformChange = useCallback((p: Platform) => {
+    setPlatform(p);
+    setSearchQuery("");
   }, []);
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto w-full">
-        <PlatformFilter
-          selected={platform}
-          onChange={(p) => {
-            setPlatform(p);
-            setSearchQuery("");
-          }}
-        />
-
-        <SearchBar 
-          value={searchQuery}
-          onChange={setSearchQuery}
-        />
-
-        <div className="flex items-center justify-between mb-4 px-2">
-          <h2 className="text-xl font-bold text-gray-900 m-0">Recommended Creators</h2>
-          <p className="text-sm text-gray-500 m-0">
-            Showing {filtered.length} of {allProfiles.length}
+      <div className="max-w-3xl">
+        {/* Page heading */}
+        <div className="mb-6">
+          <h1 className="text-xl font-semibold text-[#37322f] mb-1">
+            Find Influencers
+          </h1>
+          <p className="text-sm text-[#605a57]">
+            Browse top creators across social platforms
           </p>
+        </div>
+
+        <PlatformFilter selected={platform} onChange={handlePlatformChange} />
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+
+        {/* Results header */}
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-medium text-[#605a57] uppercase tracking-wide">
+            Results
+          </span>
+          <span className="text-xs text-[#605a57]">
+            {filtered.length} of {allProfiles.length}
+          </span>
         </div>
 
         <ProfileList

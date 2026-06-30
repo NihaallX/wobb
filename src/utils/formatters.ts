@@ -1,9 +1,12 @@
+export const FOLLOWERS_MILLION = 1_000_000;
+export const FOLLOWERS_THOUSAND = 1_000;
+
 export function formatFollowers(count: number): string {
-  if (count >= 1000000) {
-    return (count / 1000000).toFixed(1) + "M";
+  if (count >= FOLLOWERS_MILLION) {
+    return (count / FOLLOWERS_MILLION).toFixed(1) + "M";
   }
-  if (count >= 1000) {
-    return (count / 1000).toFixed(1) + "K";
+  if (count >= FOLLOWERS_THOUSAND) {
+    return (count / FOLLOWERS_THOUSAND).toFixed(1) + "K";
   }
   return count.toString();
 }

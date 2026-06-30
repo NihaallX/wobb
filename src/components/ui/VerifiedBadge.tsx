@@ -6,5 +6,7 @@ interface VerifiedBadgeProps {
 
 export function VerifiedBadge({ verified }: VerifiedBadgeProps) {
   if (!verified) return null;
-  return <BadgeCheck className="inline-block ml-1 text-[#3b82f6] -translate-y-[1px]" size={14} />;
+  return (
+    <BadgeCheck className="inline-block w-3.5 h-3.5 text-blue-500 ml-1 align-text-bottom shrink-0" />
+  );
 }

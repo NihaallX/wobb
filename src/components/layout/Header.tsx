@@ -1,21 +1,30 @@
-import React from 'react';
-import { ListChecks } from 'lucide-react';
-import useShortlistStore from '@/store/useShortlistStore';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { ListChecks } from "lucide-react";
+import useShortlistStore from "@/store/useShortlistStore";
 
 export const Header: React.FC = () => {
-  const shortlistCount = useShortlistStore(state => state.shortlist.length);
+  const count = useShortlistStore((state) => state.shortlist.length);
 
   return (
-    <header className="sticky top-0 z-50 bg-[#08060d] text-white h-16 flex items-center justify-between px-6 shadow-md">
-      <Link to="/" className="flex items-baseline gap-2 no-underline">
-        <span className="text-2xl font-bold tracking-tight text-white">Wobb</span>
-        <span className="text-sm text-gray-400 hidden sm:inline">Influencer Discovery</span>
-      </Link>
-      
-      <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/10">
-        <ListChecks size={16} className="text-[#aa3bff]" />
-        <span className="text-sm font-medium">{shortlistCount} selected</span>
+    <header className="bg-[#f7f5f3] border-b border-[#e0dedb] sticky top-0 z-50">
+      <div className="max-w-[1160px] mx-auto px-6 py-3.5 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-1.5">
+          <span className="font-semibold text-[#37322f] text-base tracking-tight">Wobb</span>
+          <span className="text-[#605a57] text-sm hidden sm:inline">Influencer Discovery</span>
+        </Link>
+
+        <div className="flex items-center gap-2 text-sm text-[#37322f]">
+          <ListChecks className="w-4 h-4 text-[#605a57]" />
+          <span className="text-[#605a57]">
+            {count === 0 ? "No shortlist" : `${count} shortlisted`}
+          </span>
+          {count > 0 && (
+            <span className="bg-[#aa3bff] text-white text-xs px-2 py-0.5 rounded-full font-medium leading-none">
+              {count}
+            </span>
+          )}
+        </div>
       </div>
     </header>
   );
