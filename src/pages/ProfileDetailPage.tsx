@@ -99,6 +99,13 @@ export function ProfileDetailPage() {
           <img
             src={user.picture}
             alt={user.username}
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              const t = e.currentTarget;
+              t.onerror = null;
+              const initials = encodeURIComponent((user.fullname || user.username).slice(0, 2).toUpperCase());
+              t.src = `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=256&bold=true&font-size=0.4`;
+            }}
             className="w-20 h-20 rounded-full object-cover ring-2 ring-[#e0dedb] shrink-0"
           />
 

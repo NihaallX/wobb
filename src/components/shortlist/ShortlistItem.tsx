@@ -19,6 +19,13 @@ export const ShortlistItem: React.FC<ShortlistItemProps> = ({ profile }) => {
       <img
         src={profile.picture}
         alt={profile.username}
+        referrerPolicy="no-referrer"
+        onError={(e) => {
+          const t = e.currentTarget;
+          t.onerror = null;
+          const initials = encodeURIComponent((profile.fullname || profile.username).slice(0, 2).toUpperCase());
+          t.src = `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=128&bold=true&font-size=0.4`;
+        }}
         className="w-8 h-8 rounded-full object-cover shrink-0 cursor-pointer"
         onClick={() => navigate(`/profile/${profile.username}`)}
       />

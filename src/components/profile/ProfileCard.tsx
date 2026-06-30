@@ -13,6 +13,12 @@ export interface ProfileCardProps {
   onProfileClick?: (username: string) => void;
 }
 
+/** Generates a deterministic fallback avatar URL using UI Avatars */
+function getFallbackAvatar(name: string): string {
+  const initials = encodeURIComponent(name.slice(0, 2).toUpperCase());
+  return `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=128&bold=true&font-size=0.4`;
+}
+
 export const ProfileCard = React.memo(function ProfileCard({
   profile,
   platform,
@@ -37,6 +43,12 @@ export const ProfileCard = React.memo(function ProfileCard({
       <img
         src={profile.picture}
         alt={profile.username}
+        referrerPolicy="no-referrer"
+        onError={(e) => {
+          const target = e.currentTarget;
+          target.onerror = null; // prevent infinite loop
+          target.src = getFallbackAvatar(profile.fullname || profile.username);
+        }}
         className={`w-11 h-11 rounded-full object-cover ring-2 shrink-0 transition-all ${
           isShortlisted ? "ring-[#aa3bff]" : "ring-transparent"
         }`}
