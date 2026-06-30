@@ -53,10 +53,14 @@ export function ProfileDetailPage() {
     if (!username) return;
     let cancelled = false;
     const load = async () => {
+      // Always get summary profile first for reliable image CDN URLs
+      const summary = findSummaryProfile(username, platform);
+      if (cancelled) return;
+      setSummaryProfile(summary);
+
       const data = await loadProfileByUsername(username);
       if (cancelled) return;
       setProfileData(data ?? null);
-      setSummaryProfile(!data ? findSummaryProfile(username, platform) : null);
     };
     load();
     return () => { cancelled = true; };
@@ -107,9 +111,12 @@ export function ProfileDetailPage() {
     );
   }
 
-  // ── Resolve user: full detail JSON takes priority, summary is fallback ──
+  // ── Resolve user: full detail JSON takes priority, but use summary picture if available ──
   const user: FullUserProfile = profileData
-    ? profileData.data.user_profile
+    ? {
+        ...profileData.data.user_profile,
+        picture: summaryProfile?.picture || profileData.data.user_profile.picture,
+      }
     : (summaryProfile as FullUserProfile);
 
   const isPartialData = !profileData && !!summaryProfile;
