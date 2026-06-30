@@ -10,7 +10,6 @@ export interface ProfileCardProps {
   profile: UserProfileSummary;
   platform: Platform;
   searchQuery?: string;
-  onProfileClick?: (username: string) => void;
 }
 
 /** Generates a deterministic fallback avatar URL using UI Avatars */
@@ -22,7 +21,6 @@ function getFallbackAvatar(name: string): string {
 export const ProfileCard = React.memo(function ProfileCard({
   profile,
   platform,
-  onProfileClick,
 }: ProfileCardProps) {
   const navigate = useNavigate();
   const isShortlisted = useShortlistStore((state) =>
@@ -30,7 +28,6 @@ export const ProfileCard = React.memo(function ProfileCard({
   );
 
   const handleClick = () => {
-    if (onProfileClick) onProfileClick(profile.username);
     navigate(`/profile/${profile.username}?platform=${platform}`);
   };
 

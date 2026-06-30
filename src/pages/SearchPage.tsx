@@ -18,10 +18,6 @@ export function SearchPage() {
     [allProfiles, searchQuery]
   );
 
-  const handleProfileClick = useCallback((username: string) => {
-    console.log("Navigating to:", username);
-  }, []);
-
   const handlePlatformChange = useCallback((p: Platform) => {
     setSearchParams({ platform: p }, { replace: true });
     setSearchQuery("");
@@ -57,7 +53,6 @@ export function SearchPage() {
           profiles={filtered}
           platform={platform}
           searchQuery={searchQuery}
-          onProfileClick={handleProfileClick}
         />
       </div>
     </Layout>

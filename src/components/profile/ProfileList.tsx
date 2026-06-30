@@ -7,14 +7,12 @@ interface ProfileListProps {
   profiles: UserProfileSummary[];
   platform: Platform;
   searchQuery: string;
-  onProfileClick: (username: string) => void;
 }
 
 export const ProfileList = React.memo(function ProfileList({
   profiles,
   platform,
   searchQuery,
-  onProfileClick,
 }: ProfileListProps) {
   return (
     <div className="flex flex-col gap-2 max-w-3xl">
@@ -30,7 +28,6 @@ export const ProfileList = React.memo(function ProfileList({
           profile={profile}
           platform={platform}
           searchQuery={searchQuery}
-          onProfileClick={onProfileClick}
         />
       ))}
     </div>
