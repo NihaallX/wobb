@@ -2,7 +2,7 @@
 
 > Frontend take-home assignment — Vibe Coder Intern
 
-**Live demo:** _(add Vercel URL here after deploy)_
+**Live demo:** [wobb-one.vercel.app](https://wobb-one.vercel.app)
 
 ---
 
@@ -52,6 +52,7 @@
 ## Libraries added
 - `zustand` — state management with localStorage persistence
 - `lucide-react` — icon system
+- `@vercel/analytics` — page view and route analytics via Vercel
 
 ## Libraries removed
 - `react-beautiful-dnd` — was in `dependencies` but never used; also incompatible with React 19
