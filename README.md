@@ -18,6 +18,9 @@
 7. **Missing usernames** — some YouTube entries only have `handle`/`custom_name` (no `username`) — `extractProfiles` now normalises with a fallback chain
 8. **Search crash** — `p.username.toLowerCase()` would throw when `username` is `undefined` — guarded with `?? ""`
 9. **Broken YouTube avatars** — Google CDN blocks cross-origin requests — fixed with `referrerPolicy="no-referrer"` + `onError` fallback to generated letter avatars
+10. **Detail page 404s** — only 6 full JSON profiles exist in the starter repo; clicking most cards hit a hard "not found" — fixed by gracefully falling back to search summary data if full detail JSON is missing
+11. **TikTok/Instagram avatar timeouts** — direct CDN URLs in detail JSON expire or block external requests — fixed by overriding with reliable proxy URLs from the search JSON
+12. **Lost tab state on back navigation** — clicking "Back to search" reset the dashboard to Instagram — fixed by syncing the active platform state with URL query parameters (`/?platform=tiktok`)
 
 ### Features implemented
 - **Shortlist ("Add to List")** — toggle button on both `ProfileCard` and `ProfileDetailPage`
