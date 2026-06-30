@@ -6,11 +6,14 @@ import { ShortlistButton } from "@/components/ui/ShortlistButton";
 import type { FullUserProfile, ProfileDetailResponse } from "@/types";
 import { formatEngagementRate, formatFollowers } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
+import { ArrowLeft, Instagram, Youtube, Music2 } from "lucide-react";
+import { getPlatformLabel } from "@/utils/dataHelpers";
+import type { Platform } from "@/types";
 
 export function ProfileDetailPage() {
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
-  const platform = searchParams.get("platform") || "unknown";
+  const platform = (searchParams.get("platform") || "unknown") as Platform | "unknown";
   const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(
     null
   );
@@ -28,105 +31,147 @@ export function ProfileDetailPage() {
   if (!username) {
     return (
       <Layout>
-        <p>Invalid profile</p>
-        <Link to="/">Back</Link>
+        <div className="flex flex-col items-center justify-center py-20">
+          <p className="text-gray-500 mb-4">Invalid profile</p>
+          <Link to="/" className="text-[#aa3bff] hover:underline">Back to search</Link>
+        </div>
       </Layout>
     );
   }
 
   if (!loaded) {
     return (
-      <Layout title={`@${username}`}>
-        <p className="text-gray-400">Loading...</p>
+      <Layout>
+        <div className="flex justify-center py-20">
+          <p className="text-gray-400">Loading...</p>
+        </div>
       </Layout>
     );
   }
 
   if (!profileData) {
     return (
-      <Layout title={`@${username}`}>
-        <p className="text-red-600 mb-4">
-          Could not load profile details for {username}
-        </p>
-        <Link to="/" className="text-blue-600 underline">
-          Back to search
-        </Link>
+      <Layout>
+        <div className="flex flex-col items-center justify-center py-20">
+          <p className="text-gray-900 font-bold text-xl mb-2">Profile Not Found</p>
+          <p className="text-gray-500 mb-6">Could not load profile details for @{username}</p>
+          <Link to="/" className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+            <ArrowLeft size={16} />
+            Back to search
+          </Link>
+        </div>
       </Layout>
     );
   }
 
   const user: FullUserProfile = profileData.data.user_profile;
 
+  const getPlatformIcon = () => {
+    if (platform === "instagram") return <Instagram size={14} />;
+    if (platform === "youtube") return <Youtube size={14} />;
+    if (platform === "tiktok") return <Music2 size={14} />;
+    return null;
+  };
+
+  const getPlatformColor = () => {
+    if (platform === "instagram") return "bg-pink-100 text-pink-700 border-pink-200";
+    if (platform === "youtube") return "bg-red-100 text-red-700 border-red-200";
+    if (platform === "tiktok") return "bg-slate-100 text-slate-800 border-slate-200";
+    return "bg-gray-100 text-gray-700 border-gray-200";
+  };
+
   return (
-    <Layout title={user.fullname}>
-      <Link to="/" className="text-sm text-blue-600 mb-4 inline-block">
-        ← Back to search
-      </Link>
+    <Layout>
+      <div className="max-w-4xl mx-auto w-full">
+        <Link 
+          to="/" 
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-8 transition-colors group"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          Back to search
+        </Link>
 
-      <div className="flex gap-6 items-start text-left max-w-2xl mx-auto">
-        <img
-          src={user.picture}
-          className="w-24 h-24 rounded-full border"
-        />
-        <div className="flex-1">
-          <h2 className="text-xl font-bold">
-            @{user.username}
-            <VerifiedBadge verified={user.is_verified} />
-          </h2>
-          <p className="text-gray-600">{user.fullname}</p>
-          <p className="text-xs text-gray-400 mt-1">Platform: {platform}</p>
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+            <img
+              src={user.picture}
+              className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover ring-4 ring-gray-50"
+            />
+            <div className="flex-1 min-w-0 w-full">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 truncate mb-1">
+                    @{user.username}
+                    <VerifiedBadge verified={user.is_verified} />
+                  </h2>
+                  <p className="text-lg text-gray-500">{user.fullname}</p>
+                </div>
+                <div className="flex gap-3 items-center self-start">
+                  {platform !== "unknown" && (
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${getPlatformColor()}`}>
+                      {getPlatformIcon()}
+                      {platform === "unknown" ? "Unknown" : getPlatformLabel(platform as Platform)}
+                    </span>
+                  )}
+                  <ShortlistButton profile={user} className="w-32 justify-center" />
+                </div>
+              </div>
 
-          {user.description && (
-            <p className="mt-3 text-sm text-gray-700">{user.description}</p>
-          )}
+              {user.description && (
+                <p className="mt-4 text-base text-gray-600 leading-relaxed max-w-3xl">
+                  {user.description}
+                </p>
+              )}
+            </div>
+          </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-            <div className="border p-2 rounded">
-              <div className="text-gray-500">Followers</div>
-              <div className="font-semibold">
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div className="text-gray-500 text-sm font-medium mb-1">Followers</div>
+              <div className="font-bold text-2xl text-gray-900">
                 {formatFollowers(user.followers)}
               </div>
             </div>
-            <div className="border p-2 rounded">
-              <div className="text-gray-500">Engagement Rate</div>
-              <div className="font-semibold">
+            <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div className="text-gray-500 text-sm font-medium mb-1">Engagement Rate</div>
+              <div className="font-bold text-2xl text-[#aa3bff]">
                 {user.engagement_rate !== undefined
                   ? (user.engagement_rate * 100).toFixed(2) + "%"
                   : "N/A"}
               </div>
             </div>
             {user.posts_count !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Posts</div>
-                <div className="font-semibold">{user.posts_count}</div>
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <div className="text-gray-500 text-sm font-medium mb-1">Posts</div>
+                <div className="font-bold text-2xl text-gray-900">{user.posts_count.toLocaleString()}</div>
               </div>
             )}
             {user.avg_likes !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Avg Likes</div>
-                <div className="font-semibold">
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <div className="text-gray-500 text-sm font-medium mb-1">Avg Likes</div>
+                <div className="font-bold text-2xl text-gray-900">
                   {formatFollowers(user.avg_likes)}
                 </div>
               </div>
             )}
             {user.avg_comments !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Avg Comments</div>
-                <div className="font-semibold">{user.avg_comments}</div>
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <div className="text-gray-500 text-sm font-medium mb-1">Avg Comments</div>
+                <div className="font-bold text-2xl text-gray-900">{user.avg_comments.toLocaleString()}</div>
               </div>
             )}
             {user.avg_views !== undefined && user.avg_views > 0 && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Avg Views</div>
-                <div className="font-semibold">
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <div className="text-gray-500 text-sm font-medium mb-1">Avg Views</div>
+                <div className="font-bold text-2xl text-gray-900">
                   {formatFollowers(user.avg_views)}
                 </div>
               </div>
             )}
             {user.engagements !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Engagements</div>
-                <div className="font-semibold">
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <div className="text-gray-500 text-sm font-medium mb-1">Engagements</div>
+                <div className="font-bold text-2xl text-gray-900">
                   {formatFollowers(user.engagements)}
                 </div>
               </div>
@@ -134,17 +179,17 @@ export function ProfileDetailPage() {
           </div>
 
           {user.url && (
-            <a
-              href={user.url}
-              target="_blank"
-              className="inline-block mt-4 text-blue-600 text-sm"
-            >
-              View on platform →
-            </a>
+            <div className="mt-8 pt-6 border-t border-gray-100 flex justify-end">
+              <a
+                href={user.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm"
+              >
+                View on Platform
+              </a>
+            </div>
           )}
-
-
-          <ShortlistButton profile={user} className="mt-4 w-40 justify-center" />
         </div>
       </div>
     </Layout>

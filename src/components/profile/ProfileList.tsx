@@ -1,5 +1,7 @@
 import type { Platform, UserProfileSummary } from "@/types";
 import { ProfileCard } from "./ProfileCard";
+import { EmptyState } from "../ui/EmptyState";
+import React from "react";
 
 interface ProfileListProps {
   profiles: UserProfileSummary[];
@@ -8,15 +10,20 @@ interface ProfileListProps {
   onProfileClick: (username: string) => void;
 }
 
-export function ProfileList({
+export const ProfileList = React.memo(function ProfileList({
   profiles,
   platform,
   searchQuery,
   onProfileClick,
 }: ProfileListProps) {
   return (
-    <div className="flex flex-col items-center">
-      {profiles.length === 0 && <p>No profiles found</p>}
+    <div className="flex flex-col gap-3 max-w-3xl mx-auto w-full">
+      {profiles.length === 0 && (
+        <EmptyState 
+          heading="No influencers found" 
+          subtext="Try adjusting your search or switching platforms to find more creators." 
+        />
+      )}
       {profiles.map((profile) => (
         <ProfileCard
           key={profile.user_id}
@@ -28,4 +35,4 @@ export function ProfileList({
       ))}
     </div>
   );
-}
+});
