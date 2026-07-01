@@ -3,18 +3,12 @@ import { useNavigate } from "react-router-dom";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "../ui/VerifiedBadge";
 import { ShortlistToggleButton } from "../ui/ShortlistButton";
-import { formatFollowers, formatEngagementRate } from "@/utils/formatters";
+import { formatFollowers, formatEngagementRate, getFallbackAvatar } from "@/utils/formatters";
 import useShortlistStore from "@/store/useShortlistStore";
 
 export interface ProfileCardProps {
   profile: UserProfileSummary;
   platform: Platform;
-}
-
-/** Generates a deterministic fallback avatar URL using UI Avatars */
-function getFallbackAvatar(name: string): string {
-  const initials = encodeURIComponent(name.slice(0, 2).toUpperCase());
-  return `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=128&bold=true&font-size=0.4`;
 }
 
 export const ProfileCard = React.memo(function ProfileCard({

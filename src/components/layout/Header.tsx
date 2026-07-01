@@ -8,7 +8,7 @@ export const Header: React.FC = () => {
 
   return (
     <header className="bg-[#f7f5f3] border-b border-[#e0dedb] sticky top-0 z-50">
-      <div className="max-w-[1160px] mx-auto px-6 py-3.5 flex items-center justify-between">
+      <div className="px-6 lg:px-10 py-3.5 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <img
             src="/logo.png"

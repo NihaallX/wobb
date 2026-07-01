@@ -1,32 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Camera, Music2, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { VerifiedBadge } from "@/components/ui/VerifiedBadge";
 import { ShortlistToggleButton } from "@/components/ui/ShortlistButton";
+import { PlatformIcon } from "@/components/ui/PlatformIcon";
 import { ProfileStats } from "@/components/profile/ProfileStats";
 import type { FullUserProfile, Platform, ProfileDetailResponse, UserProfileSummary } from "@/types";
 import { loadProfileByUsername } from "@/utils/profileLoader";
 import { getPlatformLabel, extractProfiles } from "@/utils/dataHelpers";
+import { getFallbackAvatar } from "@/utils/formatters";
 
-// Inline YouTube icon (not in lucide-react v1)
-const YoutubeIcon = ({ className }: { className?: string }) => (
-  <svg className={className} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.95C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor" stroke="none" />
-  </svg>
-);
-
-function getPlatformIcon(platform: string) {
-  if (platform === "youtube") return <YoutubeIcon className="w-3.5 h-3.5" />;
-  if (platform === "tiktok") return <Music2 className="w-3.5 h-3.5" />;
-  return <Camera className="w-3.5 h-3.5" />;
-}
-
-function getFallbackAvatar(name: string): string {
-  const initials = encodeURIComponent(name.slice(0, 2).toUpperCase());
-  return `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=256&bold=true&font-size=0.4`;
-}
 
 /**
  * Looks up the summary profile from the search JSON as a fallback
@@ -152,7 +136,7 @@ export function ProfileDetailPage() {
             onError={(e) => {
               const t = e.currentTarget;
               t.onerror = null;
-              t.src = getFallbackAvatar(user.fullname || user.username);
+              t.src = getFallbackAvatar(user.fullname || user.username, 256);
             }}
             className="w-20 h-20 rounded-full object-cover ring-2 ring-[#e0dedb] shrink-0"
           />
@@ -168,7 +152,7 @@ export function ProfileDetailPage() {
 
                 {/* Platform chip */}
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#f7f5f3] border border-[#e0dedb] text-[#605a57] mt-2">
-                  {getPlatformIcon(platform)}
+                  <PlatformIcon platform={platform} />
                   {getPlatformLabel(platform as Platform)}
                 </span>
               </div>

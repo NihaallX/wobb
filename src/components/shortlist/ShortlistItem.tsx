@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { UserProfileSummary } from "@/types";
 import useShortlistStore from "@/store/useShortlistStore";
+import { getFallbackAvatar } from "@/utils/formatters";
 
 interface ShortlistItemProps {
   profile: UserProfileSummary;
@@ -24,8 +25,7 @@ export const ShortlistItem = React.memo(function ShortlistItem({ profile }: Shor
         onError={(e) => {
           const t = e.currentTarget;
           t.onerror = null;
-          const initials = encodeURIComponent((profile.fullname || profile.username).slice(0, 2).toUpperCase());
-          t.src = `https://ui-avatars.com/api/?name=${initials}&background=e0dedb&color=37322f&size=128&bold=true&font-size=0.4`;
+          t.src = getFallbackAvatar(profile.fullname || profile.username);
         }}
         className="w-8 h-8 rounded-full object-cover shrink-0 cursor-pointer"
         onClick={() => navigate(`/profile/${profile.username}`)}
