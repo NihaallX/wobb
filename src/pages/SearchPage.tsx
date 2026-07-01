@@ -6,16 +6,18 @@ import { PlatformFilter } from "@/components/ui/PlatformFilter";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { ProfileList } from "@/components/profile/ProfileList";
 import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const platform = (searchParams.get("platform") as Platform) || "instagram";
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedQuery = useDebounce(searchQuery, 150);
 
   const allProfiles = useMemo(() => extractProfiles(platform), [platform]);
   const filtered = useMemo(
-    () => filterProfiles(allProfiles, searchQuery),
-    [allProfiles, searchQuery]
+    () => filterProfiles(allProfiles, debouncedQuery),
+    [allProfiles, debouncedQuery]
   );
 
   const handlePlatformChange = useCallback((p: Platform) => {

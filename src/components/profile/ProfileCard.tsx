@@ -24,10 +24,20 @@ export const ProfileCard = React.memo(function ProfileCard({
     navigate(`/profile/${profile.username}?platform=${platform}`);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={handleClick}
-      className="w-full flex items-center gap-4 px-4 py-3 bg-white border border-[#e0dedb] rounded-lg hover:shadow-sm hover:border-[#605a57]/30 transition-all cursor-pointer"
+      onKeyDown={handleKeyDown}
+      className="w-full flex items-center gap-4 px-4 py-3 bg-white border border-[#e0dedb] rounded-lg hover:shadow-sm hover:border-[#605a57]/30 focus:outline-none focus:ring-2 focus:ring-[#aa3bff] transition-all cursor-pointer"
     >
       {/* Avatar */}
       <img

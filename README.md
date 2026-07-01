@@ -44,7 +44,8 @@
 - Profile cards with chip stats, avatar ring on shortlisted state
 - Profile detail: header card, platform chip, stats grid
 
-### Accessibility
+### Accessibility (a11y)
+- Full keyboard navigation: `ProfileCard` and `ShortlistItem` are fully navigable via `Tab`, `Enter`, and `Space`.
 - `aria-label` on all icon-only buttons (remove, add/remove from shortlist, close drawer)
 - `aria-pressed` on shortlist toggle buttons
 - `aria-modal` / `role="dialog"` on mobile drawer
@@ -75,12 +76,9 @@
 - YouTube entries without a `username` field use `handle` or `fullname` as fallback
 
 ## Trade-offs
-- No debounce on search input — data is static JSON so filtering is effectively instant; debounce adds complexity without measurable benefit at this data scale
 - No React Query / SWR — all data is local static JSON, a fetching layer would be overkill
 - No drag-to-reorder in shortlist panel — deferred given scope constraints
 
 ## If I had more time
-- Search input debouncing for larger datasets
 - Pagination / virtual list for 100+ results per platform
 - Drag-to-reorder in shortlist panel
-- Keyboard navigation for the platform filter

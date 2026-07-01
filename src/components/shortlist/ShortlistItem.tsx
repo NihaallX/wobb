@@ -15,6 +15,15 @@ export const ShortlistItem = React.memo(function ShortlistItem({ profile }: Shor
   );
   const navigate = useNavigate();
 
+  const handleNavigate = () => navigate(`/profile/${profile.username}`);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleNavigate();
+    }
+  };
+
   return (
     <div className="flex items-center gap-3 px-3 py-2 bg-white rounded-lg border border-[#e0dedb]">
       <img
@@ -27,12 +36,18 @@ export const ShortlistItem = React.memo(function ShortlistItem({ profile }: Shor
           t.onerror = null;
           t.src = getFallbackAvatar(profile.fullname || profile.username);
         }}
-        className="w-8 h-8 rounded-full object-cover shrink-0 cursor-pointer"
-        onClick={() => navigate(`/profile/${profile.username}`)}
+        className="w-8 h-8 rounded-full object-cover shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#aa3bff]"
+        role="button"
+        tabIndex={0}
+        onClick={handleNavigate}
+        onKeyDown={handleKeyDown}
       />
       <div
-        className="flex-1 min-w-0 cursor-pointer"
-        onClick={() => navigate(`/profile/${profile.username}`)}
+        className="flex-1 min-w-0 cursor-pointer rounded focus:outline-none focus:ring-2 focus:ring-[#aa3bff]"
+        role="button"
+        tabIndex={0}
+        onClick={handleNavigate}
+        onKeyDown={handleKeyDown}
       >
         <div className="text-xs font-medium text-[#37322f] truncate">
           @{profile.username}
