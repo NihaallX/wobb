@@ -8,7 +8,7 @@ interface ShortlistItemProps {
   profile: UserProfileSummary;
 }
 
-export const ShortlistItem: React.FC<ShortlistItemProps> = ({ profile }) => {
+export const ShortlistItem = React.memo(function ShortlistItem({ profile }: ShortlistItemProps) {
   const removeFromShortlist = useShortlistStore(
     (state) => state.removeFromShortlist
   );
@@ -48,4 +48,4 @@ export const ShortlistItem: React.FC<ShortlistItemProps> = ({ profile }) => {
       </button>
     </div>
   );
-};
+});

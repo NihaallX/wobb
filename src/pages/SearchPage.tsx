@@ -52,7 +52,6 @@ export function SearchPage() {
         <ProfileList
           profiles={filtered}
           platform={platform}
-          searchQuery={searchQuery}
         />
       </div>
     </Layout>

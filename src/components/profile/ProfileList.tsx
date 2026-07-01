@@ -6,13 +6,11 @@ import { EmptyState } from "../ui/EmptyState";
 interface ProfileListProps {
   profiles: UserProfileSummary[];
   platform: Platform;
-  searchQuery: string;
 }
 
 export const ProfileList = React.memo(function ProfileList({
   profiles,
   platform,
-  searchQuery,
 }: ProfileListProps) {
   return (
     <div className="flex flex-col gap-2 max-w-3xl">
@@ -27,7 +25,6 @@ export const ProfileList = React.memo(function ProfileList({
           key={profile.user_id}
           profile={profile}
           platform={platform}
-          searchQuery={searchQuery}
         />
       ))}
     </div>

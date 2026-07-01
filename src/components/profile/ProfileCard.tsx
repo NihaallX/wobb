@@ -9,7 +9,6 @@ import useShortlistStore from "@/store/useShortlistStore";
 export interface ProfileCardProps {
   profile: UserProfileSummary;
   platform: Platform;
-  searchQuery?: string;
 }
 
 /** Generates a deterministic fallback avatar URL using UI Avatars */
