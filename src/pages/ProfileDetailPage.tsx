@@ -199,6 +199,68 @@ export function ProfileDetailPage() {
 
         {/* Stats grid */}
         <ProfileStats user={user} />
+
+        {/* 1. Audience Insights section */}
+        {(user.gender || user.age_group) && (
+          <div className="mt-4 bg-white border border-[#e0dedb] rounded-lg p-5">
+            <h2 className="text-sm font-semibold text-[#37322f] mb-3">Audience Insights</h2>
+            <div className="flex flex-wrap gap-3">
+              {user.gender && (
+                <div className="bg-[#f7f5f3] border border-[#e0dedb] rounded-lg px-4 py-3 flex flex-col gap-0.5">
+                  <span className="text-xs text-[#605a57]">Gender</span>
+                  <span className="text-sm font-medium text-[#37322f] capitalize">{user.gender}</span>
+                </div>
+              )}
+              {user.age_group && (
+                <div className="bg-[#f7f5f3] border border-[#e0dedb] rounded-lg px-4 py-3 flex flex-col gap-0.5">
+                  <span className="text-xs text-[#605a57]">Age Group</span>
+                  <span className="text-sm font-medium text-[#37322f]">{user.age_group}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* 2. Account Type section */}
+        {(user.is_business !== undefined || user.type) && (
+          <div className="mt-4 bg-white border border-[#e0dedb] rounded-lg p-5">
+            <h2 className="text-sm font-semibold text-[#37322f] mb-3">Account Info</h2>
+            <div className="flex flex-wrap gap-3">
+              {user.type && (
+                <div className="bg-[#f7f5f3] border border-[#e0dedb] rounded-lg px-4 py-3 flex flex-col gap-0.5">
+                  <span className="text-xs text-[#605a57]">Account Type</span>
+                  <span className="text-sm font-medium text-[#37322f] capitalize">{user.type}</span>
+                </div>
+              )}
+              {user.is_business !== undefined && (
+                <div className="bg-[#f7f5f3] border border-[#e0dedb] rounded-lg px-4 py-3 flex flex-col gap-0.5">
+                  <span className="text-xs text-[#605a57]">Business Account</span>
+                  <span className="text-sm font-medium text-[#37322f]">{user.is_business ? "Yes" : "No"}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* 3. Partial data fallback */}
+        {isPartialData && (
+          <div className="mt-6 bg-[#f7f5f3] border border-[#e0dedb] rounded-lg p-6 text-center">
+            <p className="text-sm font-medium text-[#37322f] mb-1">Full profile data unavailable</p>
+            <p className="text-xs text-[#605a57]">
+              This creator's detailed analytics aren't in the dataset yet.<br />
+              Summary stats are shown above.
+            </p>
+          </div>
+        )}
+
+        {/* 4. Bottom CTA strip */}
+        <div className="mt-6 bg-white border border-[#e0dedb] rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-[#37322f]">Interested in this creator?</p>
+            <p className="text-xs text-[#605a57] mt-0.5">Add them to your shortlist to compare later</p>
+          </div>
+          <ShortlistToggleButton profile={user} />
+        </div>
       </div>
     </Layout>
   );
