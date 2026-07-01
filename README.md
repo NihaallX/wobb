@@ -57,6 +57,12 @@
 - `lucide-react` — icon system
 - `@vercel/analytics` — page view and route analytics via Vercel
 
+### Testing
+- `vitest` — test runner (Vite-native, zero config)
+- `@testing-library/react` — hook testing for Zustand store
+- 14 unit tests across formatters, dataHelpers, and useShortlistStore
+- Run with: `npm run test`
+
 ## Libraries removed
 - `react-beautiful-dnd` — was in `dependencies` but never used; also incompatible with React 19
 
@@ -76,6 +82,5 @@
 ## If I had more time
 - Search input debouncing for larger datasets
 - Pagination / virtual list for 100+ results per platform
-- Unit tests for utils (`formatters`, `dataHelpers`) and the Zustand store
 - Drag-to-reorder in shortlist panel
 - Keyboard navigation for the platform filter
