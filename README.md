@@ -2,7 +2,7 @@
 
 > Frontend take-home assignment — Vibe Coder Intern
 
-**Live demo:** [wobb-one.vercel.app](https://wobb-one.vercel.app)
+**Live demo:** [wobb-assignment](https://wobb-one.vercel.app)
 
 ---
 
